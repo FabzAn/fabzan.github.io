@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Player Distribution Programm</title>
+    </head>
+
+    <body style="font-family: Courier, monospace; font-size: 100%">
+        <div>
+            Number of players in team A: <input type="text" id="teamA"><br>
+            Number of players in team B: <input type="text" id="teamB"><br>
+        </div>
+
+        <div>
+            <input type="submit" onclick="calculateDistribution()" value="Calculate">
+        </div>
+
+        <div id="output"></div>
+
+        <script>
+
+            var inputA = document.getElementById("teamA");
+            var inputB = document.getElementById("teamB");
+            inputA.addEventListener("keydown", function (e) {
+                if (e.keyCode === 13)
+                    calculateDistribution();
+            })
+            inputB.addEventListener("keydown", function (e) {
+                if (e.keyCode === 13)
+                    calculateDistribution();
+            })
+
+            Array.prototype.contains = function(obj) {
+                var i = this.length;
+                while (i--) {
+                    if (this[i] === obj) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            function calculateDistribution() {
+
+                const teamA = parseInt(document.getElementById("teamA").value);
+                const teamB = parseInt(document.getElementById("teamB").value);
+
+                const output = document.getElementById("output");
+
+                if (isNaN(teamA) || isNaN(teamB)
+                    || teamA === 0 || teamB === 0) {
+                    output.innerHTML = "<p>Need numbers for that.</p>";
+                    return;
+                }
+
+                const aIsBigger = teamA > teamB;
+
+                let bigTeam = aIsBigger ? teamA : teamB;
+                let smallTeam = aIsBigger ? teamB : teamA;
+
+                //Calculates how often smallTeam fits into bigTeam
+                let wayToManyPlayers = 1;
+                while (bigTeam / smallTeam >= 2) {
+                    wayToManyPlayers++;
+                    bigTeam -= smallTeam;
+                }
+
+                let k = (smallTeam + 1) / (bigTeam - smallTeam + 1);
+                const numberOfPlayersInShownTeam = aIsBigger ? teamB : teamA;
+
+                //array for indices of players how play additional games
+                let ks = [];
+
+                for (let i = 0; i < smallTeam; i++) {
+                    ks.push(Math.round(i * k));
+                }
+
+                output.innerHTML = "<p>Team " + (aIsBigger ? "B" : "A") + " plays as follows:</p>";
+
+                for (let j = 1; j <= numberOfPlayersInShownTeam; j++) {
+
+                    let addHere;
+                    let currentLine = "";
+
+                    if (ks.contains(j)) {
+                        addHere = 1;
+                    }
+                    else {
+                        addHere = 0;
+                    }
+
+                    addHere += wayToManyPlayers;
+
+                    currentLine = ((addHere === 1) ? "&nbsp&nbsp" : (addHere + "x")) + "&nbsp";
+
+                    if (j === 1) {
+                        currentLine += "Strongest Player";
+                    } else if (j === numberOfPlayersInShownTeam) {
+                        currentLine += "Weakest Player";
+                    } else {
+                        currentLine += "Player " + j;
+                    }
+
+                    currentLine += "<br>";
+
+                    output.innerHTML += currentLine;
+                }
+            }
+        </script>
+    </body>
+</html>
