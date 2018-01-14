@@ -34,8 +34,8 @@ Return
 !u::Send {=}
 Return
 
-<^!>i::
-!i::Send {!}
+<^!>z::
+!z::Send {!}
 Return
 
 <^>!o::
