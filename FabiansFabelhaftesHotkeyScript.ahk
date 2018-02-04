@@ -58,8 +58,12 @@ Return
 !ö::Send {End}
 Return
 
-<^!>ä::
+<^>!ä::
 !ä::Send {Enter}
+Return
+
+<^>!#::
+!#::Send ¶
 Return
 
 <^>!-::
